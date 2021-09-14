@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+
+    <!--구글폰트-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&display=swap"
+          rel="stylesheet">
+
+    <!--버마-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <style>
+        * {
+            /*font-family: 'Black Han Sans', sans-serif;*/
+            /*font-family: 'Nanum Pen Script', cursive;*/
+        }
+
+        .login-section {
+            width: 100vw;
+            height: 100vh;
+            background-color: beige;
+        }
+
+        .login {
+            padding: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+<section class="login-section">
+    <div class="login">
+        <div class="field is-grouped">
+            <p class="control is-expanded">
+                <input class="input" type="text" placeholder="Find a repository">
+            </p>
+            <p class="control">
+                <a class="button is-info">
+                    Search
+                </a>
+            </p>
+        </div>
+    </div>
+</section>
+</body>
+</html>
