@@ -49,7 +49,6 @@ def sign_in():
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
 
-
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     result = db.users.find_one({'username': username_receive, 'password': pw_hash})
 
@@ -93,6 +92,23 @@ def nickname_check_dup():
     nickname_receive = request.form['nickname_give']
     nick_exists = bool(db.users.find_one({"nickname": nickname_receive}))
     return jsonify({'result': 'success', 'exists': nick_exists})
+
+@app.route('/api/save_word', methods=['POST'])
+def save_word():
+    # 리뷰 저장하기
+    review_receive = request.form["review_give"]
+    tag_receive = request.form["tag_give"]
+    nickname_receive = request.form["nickname_give"]
+
+    doc = {"review": review_receive, "tag": tag_receive, "nick_name": nickname_receive}
+    db.reviews.insert_one(doc)
+    return jsonify({'result': 'success', 'msg': '리뷰가 저장되었습니다.'})
+
+
+@app.route('/api/delete_word', methods=['POST'])
+def delete_word():
+    # 리뷰 삭제하기
+    return jsonify({'result': 'success', 'msg': '리뷰가 삭제되었습니다.'})
 
 
 if __name__ == '__main__':
