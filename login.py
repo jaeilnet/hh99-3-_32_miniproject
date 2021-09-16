@@ -22,20 +22,24 @@ def home():
     token_receive = request.cookies.get('my_info')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        return render_template('detail.html')
 
-        return render_template('login.html')
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
-
-@app.route('/abcd')
-# 로그인 하고나서 화면전환 테스트
-def abcd():
-    return render_template('abcd.html')
-
-
+@app.route('/detail')
+def detail():
+    token_receive = request.cookies.get('my_info')
+    # return render_template("detail.html")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
+        print(user_info)
+        return render_template('detail.html', user_info=user_info)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("detail"))
 
 @app.route('/login')
 def login():
