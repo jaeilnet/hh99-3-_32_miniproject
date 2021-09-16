@@ -95,27 +95,5 @@ def nickname_check_dup():
     return jsonify({'result': 'success', 'exists': nick_exists})
 
 
-# @app.route('/update_profile', methods=['POST'])
-# def save_img():
-#     token_receive = request.cookies.get('mytoken')
-#     try:
-#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-#         # 프로필 업데이트
-#         return jsonify({"result": "success", 'msg': '프로필을 업데이트했습니다.'})
-#     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-#         return redirect(url_for("home"))
-#
-#
-# @app.route('/posting', methods=['POST'])
-# def posting():
-#     token_receive = request.cookies.get('mytoken')
-#     try:
-#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-#         # 포스팅하기
-#         return jsonify({"result": "success", 'msg': '포스팅 성공'})
-#     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-#         return redirect(url_for("home"))
-
-
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
