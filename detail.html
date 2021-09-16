@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sparta Vocabulary Notebook</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <style>
+        .wrap {
+            background-color: rgb(190, 183, 211);
+            min-height: 100vh;
+            padding-bottom: 50px;
+            /*background-image: url("");*/
+            background-size: cover;
+        }
+
+        .banner {
+            width: 100%;
+            height: 150px;
+
+            background-color: rgb(143, 130, 154);
+            background-image: url('{{ url_for("static", filename="logo.png") }}');
+
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+
+            cursor: pointer;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+
+            border: solid 1px gray;
+            border-radius: 10px;
+        }
+
+        span.example {
+            color: gray;
+            font-size: 14px;
+        }
+
+        .btn-outline-sparta {
+            color: rgb(69, 18, 116);
+            background-color: transparent;
+            background-image: none;
+            border-color: rgb(69, 18, 116);
+        }
+
+        .btn-group {
+            margin: 0px 0px 20px 0px;
+            float: right;
+        }
+
+        .text-muted {
+            float: right;
+        }
+
+    </style>
+    <script>
+        function save_word() {
+            let review = $('#exampleFormControlTextarea1').val();
+            let tag = $('#input-tag').val();
+            console.log(review, tag)
+                $.ajax({
+                    type: "POST",
+                    url: `/api/save_word`,
+                    data: {review_give:review},
+                    success: function (response) {
+                        alert(response["msg"])
+                        window.location.href = "/detail"
+                    }
+                });
+            }
+
+    </script>
+</head>
+<body>
+<div class="wrap">
+    <div class="banner" onclick="window.location.href = '/'"> {#//클릭하면 메인으로 떨어짐#}
+    </div>
+    <button id="btn-save" class="btn btn-outline-sparta btn-lg"><i class="fa fa-chevron-left" aria-hidden="true"></i>
+    </button>
+    <button id="btn-save" class="btn btn-outline-sparta btn-lg" style=float:right>로그아웃</i>
+    </button>
+    <div class="container">
+        <div class="card mb-3" style="max-width: 800px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="https://movie-phinf.pstatic.net/20210823_223/1629695673976ctSz6_JPEG/movie_image.jpg"
+                         class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title"> 토베 얀손 </h3>
+                        <p class="card-text">“난 인생이란 멋진 모험이라고 믿어요” 자유로운 영혼을 가진 예술가 토베는 삽화 의뢰로 알게 된 연극 연출가 비비카와 강렬한 사랑에
+                            빠진다 자신의 캐릭터 ‘무민’을 연극 무대에 올리고 시청 벽화를 그리며 인정받기 시작한 토베 하지만 비비카는 파리로 떠나는데… ‘무민’ 작가로만 알고 있었던 그녀의
+                            진짜 이야기를 만난다!</p>
+                        <a class="card-text" href="https://movie.naver.com/movie/bi/mi/basic.naver?code=201559"><small class="text-muted">더보기...</small></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end">
+            <div>
+                <h3 id="word" style="display: inline;">리뷰하기</h3>
+                <span class="example">당신의 감성을 남겨주세요 어쩌구</span>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+        <div id="definitions">
+            <div class="card-body">
+                <div class="btn-group" role="group" aria-label="...">
+                    <div class="btn-group" role="group">
+                        <select class="custom-select" id="input-tag">
+                            <option selected>--감성셀렉--</option>
+                            <option>산뜻할때</option>
+                            <option>적적할때</option>
+                            <option>힐링힐링</option>
+                            <option>몰랑몰랑</option>
+                        </select>
+<!--                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">-->
+<!--                            감성셀렉-->
+<!--                            <span class="caret"></span>-->
+<!--                        </button>                        -->
+<!--                        <ul class="dropdown-menu" role="menu" id="tag-box">-->
+<!--                            <li><button class="dropdown-item" type="button">산뜻할때</button></li>-->
+<!--                            <li><button class="dropdown-item" type="button">적적할때</button></li>-->
+<!--                            <li><button class="dropdown-item" type="button">몰랑몰랑</button></li>-->
+<!--                            <li><button class="dropdown-item" type="button">힐링힐링</button></li>-->
+<!--                        </ul>-->
+                        <button onclick="save_word()" type="button" class="btn btn-default">작성하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <tbody>
+            <tr>
+                <th scope="row"><i class="fa fa-user" aria-hidden="true"></i></th>
+                <td>bbbong(gimh****)</td>
+                <td>귀여운 포켓몬들이 많이 나와서 보는 재미가 있었어요! 작화도 퀄리티 완전 높고 OST까지 감동적 ㅠㅜ 추석 영화로 완전 추천입니다
+                </td>
+                <td><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="fa fa-user" aria-hidden="true"></i></th>
+                <td>bbbong(gimh****)</td>
+                <td>....</td>
+                <td><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+            </tr>
+            <tr>
+                <th scope="row"><i class="fa fa-user" aria-hidden="true"></i></th>
+                <td>bbbong(gimh****)</td>
+                <td>버튼이 왜 안움직이지</td>
+                <td><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+</body>
+</html>
