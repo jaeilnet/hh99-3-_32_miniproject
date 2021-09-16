@@ -46,8 +46,8 @@
                 },
                 success: function (response) {
                     if (response['result'] == 'success') {
-                        $.cookie('my_info', response['token'], {path: '/detail'});
-                        window.location.replace("/detail")
+                        $.cookie('my_info', response['token'], {path: '/main'});
+                        window.location.replace("/main")
                     } else {
                         alert(response['msg'])
                     }

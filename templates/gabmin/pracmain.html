@@ -1,0 +1,165 @@
+{#<!doctype html>#}
+{#<html lang="en">#}
+{##}
+{#<head>#}
+{#    <!-- Required meta tags -->#}
+{#    <meta charset="utf-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">#}
+{##}
+{#    <!-- Bootstrap CSS -->#}
+{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"#}
+{#          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">#}
+{##}
+{#    <!-- Optional JavaScript -->#}
+{#    <!-- jQuery first, then Popper.js, then Bootstrap JS -->#}
+{#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"#}
+{#            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"#}
+{#            crossorigin="anonymous"></script>#}
+{#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"#}
+{#            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"#}
+{#            crossorigin="anonymous"></script>#}
+{##}
+{#    <title>감수성 영화관 | 기분에 따른 영화추천</title>#}
+{#</head>#}
+{#<style>#}
+{#    * {#}
+{#        background-color: mediumpurple;#}
+{#    }#}
+{##}
+{#    .wrap {#}
+{#        height: 75px;#}
+{#        width: 100%;#}
+{#        margin: 0 auto;#}
+{#    }#}
+{##}
+{#    .menu {#}
+{#        float: right;#}
+{#        padding-top: 20px;#}
+{#        padding-right: 50px;#}
+{#        display: block;#}
+{#    }#}
+{##}
+{#    .title {#}
+{#        color: white;#}
+{#        line-height: 75px;#}
+{#        float: left;#}
+{#        padding-left: 50px;#}
+{#    }#}
+{##}
+{#    .header {#}
+{#        border-bottom: 1px white solid;#}
+{#    }#}
+{##}
+{#    .memo {#}
+{#        text-align: center;#}
+{#        color: white;#}
+{#        padding: 100px;#}
+{#        height: 200px;#}
+{##}
+{#    }#}
+{##}
+{#    .article {#}
+{#        display: block;#}
+{#        border-bottom: 1px white solid;#}
+{#    }#}
+{##}
+{#    .total_mood {#}
+{#        margin: 0 auto;#}
+{#        display: block;#}
+{#        max-width: 800px;#}
+{#        text-align: center;#}
+{##}
+{##}
+{#    }#}
+{##}
+{#    .mood {#}
+{#        width: 200px;#}
+{#        height: 100px;#}
+{#        display: inline-block;#}
+{#        text-align: center;#}
+{#        margin: auto;#}
+{#        padding: 0 20px;#}
+{##}
+{##}
+{#    }#}
+{#    .list {#}
+{#        text-align: center;#}
+{#        padding-top: 50px;#}
+{#        padding-left: 200px;#}
+{#        padding-right: 300px;#}
+{#        color: white;#}
+{##}
+{#    }#}
+{##}
+{#    .tag{#}
+{#         text-align: left;#}
+{##}
+{#    }#}
+{#    .media{#}
+{#        padding:40px 0;#}
+{#        display: block;#}
+{#    }#}
+{#</style>#}
+{##}
+{#<body>#}
+{#<header class="header">#}
+{#    <div class="wrap">#}
+{#        <h1 class="title">감수성 영화관</h1>#}
+{#        <div class="menu">#}
+{#            <button type="button" class="btn btn-outline-light">로그아웃</button>#}
+{#        </div>#}
+{#    </div>#}
+{#</header>#}
+{#<div class="memo">#}
+{#    <p> 오늘의 (Jinja2로 닉네임가져오기)님 감성을 골라주세요!</p>#}
+{#</div>#}
+{#<article class="article">#}
+{#    <div class="total_mood">#}
+{#        <div class="mood">#}
+{#            <button type="button" class="btn btn-light">#우울한</button>#}
+{#        </div>#}
+{#        <div class="mood">#}
+{#            <button type="button" class="btn btn-light">#혼자보고싶은</button>#}
+{#        </div>#}
+{#        <div class="mood">#}
+{#            <button type="button" class="btn btn-light">#오싹한</button>#}
+{#        </div>#}
+{#        <div class="mood">#}
+{#            <button type="button" class="btn btn-light">#꿀잼</button>#}
+{#        </div>#}
+{#        <div class="mood">#}
+{#            <button type="button" class="btn btn-light">#충격,신선</button>#}
+{#        </div>#}
+{#        <div class="mood">#}
+{#            <button type="button" class="btn btn-light">#힐링</button>#}
+{#        </div>#}
+{##}
+{#    </div>#}
+{#</article>#}
+{#<article class="list">#}
+{#    <ul class="list-unstyled">#}
+{#        <div class="media">#}
+{#            {% for name in movie %}#}
+{#            {% set movie_title = name.title %}#}
+{#            {% set movie_stars = name.stars %}#}
+{#            {% set movie_genre = name.genre %}#}
+{#            {% set movie_image = name.image %}#}
+{#            {% set movie_story = name.story %}#}
+{##}
+{#            <a href="/detail/{{ movie_title }}"><img class="mr-3" src="{{ movie_image }}" alt="Generic placeholder image" ></a>#}
+{#            <div class="media-body">#}
+{#                <h5 class="mt-0 mb-1">{{ movie_title }}</h5>#}
+{#                <p>{{ movie_story }}</p>#}
+{#                <div class="tag">#}
+{#                #꿀잼 #충격,신선 #혼자보고싶은 장르:{{ movie_genre }}, 별점:{{ movie_stars }}#}
+{#                </div>#}
+{#            </div>#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#    </ul>#}
+{#</article>#}
+{##}
+{#</body>#}
+{##}
+{#</html>#}

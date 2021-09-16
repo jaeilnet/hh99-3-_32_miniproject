@@ -1,0 +1,206 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>#}
+{#    <title>영화 {{ word }} 상세정보</title>#}
+{##}
+{#    <!-- Bootstrap CSS -->#}
+{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"#}
+{#          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"#}
+{#          crossorigin="anonymous">#}
+{#    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">#}
+{##}
+{#    <!-- Optional JavaScript -->#}
+{#    <!-- jQuery first, then Popper.js, then Bootstrap JS -->#}
+{#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"#}
+{#            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"#}
+{#            crossorigin="anonymous"></script>#}
+{#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"#}
+{#            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"#}
+{#            crossorigin="anonymous"></script>#}
+{#    <style>#}
+{#        .wrap {#}
+{#            background-color: rgb(190, 183, 211);#}
+{#            min-height: 100vh;#}
+{#            padding-bottom: 50px;#}
+{#            /*background-image: url("");*/#}
+{#            background-size: cover;#}
+{#        }#}
+{##}
+{#        .banner {#}
+{#            width: 100%;#}
+{#            height: 150px;#}
+{##}
+{#            background-color: rgb(143, 130, 154);#}
+{#            background-image: url('{{ url_for("static", filename="logo.png") }}');#}
+{##}
+{#            background-position: center;#}
+{#            background-size: contain;#}
+{#            background-repeat: no-repeat;#}
+{##}
+{#            cursor: pointer;#}
+{#        }#}
+{##}
+{#        .container {#}
+{#            width: 80%;#}
+{#            max-width: 800px;#}
+{#            margin: 30px auto;#}
+{#            padding: 20px;#}
+{#            background-color: white;#}
+{##}
+{#            border: solid 1px gray;#}
+{#            border-radius: 10px;#}
+{#        }#}
+{##}
+{#        span.example {#}
+{#            color: gray;#}
+{#            font-size: 14px;#}
+{#        }#}
+{##}
+{#        .btn-outline-sparta {#}
+{#            color: rgb(69, 18, 116);#}
+{#            background-color: transparent;#}
+{#            background-image: none;#}
+{#            border-color: rgb(69, 18, 116);#}
+{#        }#}
+{##}
+{#        .btn-group {#}
+{#            margin: 0 0 20px 0;#}
+{#            float: right;#}
+{#        }#}
+{##}
+{#        .text-muted {#}
+{#            float: right;#}
+{#        }#}
+{##}
+{#    </style>#}
+{#    <script>#}
+{##}
+{#        function review_create({{ word }}) {#}
+{#            let review = $('#exampleFormControlTextarea1').val()#}
+{#            let order = $('#input-tag').val()#}
+{#            $.ajax({#}
+{#                type: "POST",#}
+{#                url: '/api/review_create',#}
+{#                data: {title_give: {{ word }}, review_give: review, tag_give: order},#}
+{#                success: function (response) {#}
+{#                    alert(response['msg'])#}
+{#                    window.location.href = "/detail/{{ word }}"#}
+{##}
+{#                }#}
+{##}
+{#            });#}
+{#        }#}
+{##}
+{#        function review_delete({{ word }}) {#}
+{#            $.ajax({#}
+{#                type: 'POST',#}
+{#                url: '/api/review_delete',#}
+{#                data: {title_give: "{{ word }}"},#}
+{#                success: function (response) {#}
+{#                    alert(response['msg']);#}
+{#                    window.location.href = "/detail/{{ word }}"#}
+{#                }#}
+{#            });#}
+{#        }#}
+{##}
+{#    </script>#}
+{#</head>#}
+{#<body>#}
+{#<div class="wrap">#}
+{#    <div class="banner" onclick="window.location.href = '/'"> {#//클릭하면 메인으로 떨어짐#}
+{#    </div>#}
+{#    <button id="btn-save" class="btn btn-outline-sparta btn-lg" onclick="window.location.href = '/'"><i#}
+{#            class="fa fa-chevron-left" aria-hidden="true"></i>#}
+{#    </button>#}
+{#    <button id="btn-save" class="btn btn-outline-sparta btn-lg" style=float:right>로그아웃#}
+{#    </button>#}
+{##}
+{#    <div class="container">#}
+{#        <div class="card mb-3" style="max-width: 800px;">#}
+{#            <div class="row g-0">#}
+{#                {% for name in movie %}#}
+{#                    {% if name.title == word %}#}
+{#                        <img src="">#}
+{#                        <h1 id="word" style="display: inline;"></h1>#}
+{#                        <h2></h2>#}
+{#                        <h5 id="pronunciation" style="display: inline;"></h5>#}
+{##}
+{#                        <div class="col-md-4">#}
+{#                            <img src="{{ name.image }}" class="img-fluid rounded-start" alt="...">#}
+{#                        </div>#}
+{#                        <div class="col-md-8">#}
+{#                            <div class="card-body">#}
+{##}
+{#                                <h3 class="card-title"> {{ word }} </h3>#}
+{#                                <p class="card-text">{{ name.story }}</p>#}
+{#                                <a class="card-text" href="{{ name.url }}"><small class="text-muted">더보기...</small></a>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    {% endif %}#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <div class="container">#}
+{#        <div class="d-flex justify-content-between align-items-end">#}
+{#            <div>#}
+{#                <h3 id="word" style="display: inline;">리뷰하기</h3>#}
+{#                <span class="example">당신의 감성을 남겨주세요 어쩌구</span>#}
+{#            </div>#}
+{#        </div>#}
+{#        <hr>#}
+{#        <div>#}
+{#            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" style="resize: none"></textarea>#}
+{#        </div>#}
+{#        <div id="definitions">#}
+{#            <div class="card-body">#}
+{#                <div class="btn-group" role="group" aria-label="...">#}
+{#                    <div class="btn-group" role="group">#}
+{#                        <select class="custom-select" id="input-tag">#}
+{#                            <option selected>--감성셀렉--</option>#}
+{#                            <option >산뜻할때</option>#}
+{#                            <option >적적할때</option>#}
+{#                            <option >힐링힐링</option>#}
+{#                            <option >몰랑몰랑</option>#}
+{#                        </select>#}
+{#                        <!--                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">-->#}
+{#                        <!--                            감성셀렉-->#}
+{#                        <!--                            <span class="caret"></span>-->#}
+{#                        <!--                        </button>                        -->#}
+{#                        <!--                        <ul class="dropdown-menu" role="menu" id="tag-box">-->#}
+{#                        <!--                            <li><button class="dropdown-item" type="button">산뜻할때</button></li>-->#}
+{#                        <!--                            <li><button class="dropdown-item" type="button">적적할때</button></li>-->#}
+{#                        <!--                            <li><button class="dropdown-item" type="button">몰랑몰랑</button></li>-->#}
+{#                        <!--                            <li><button class="dropdown-item" type="button">힐링힐링</button></li>-->#}
+{#                        <!--                        </ul>-->#}
+{#                        <button onclick="review_create('{{ word|e }}')" type="button" class="btn btn-default">작성하기#}
+{#                        </button>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <table class="table table-striped">#}
+{#            <tbody>#}
+{#            {% for reviews in review %}#}
+{#                {% if reviews.title ==  word  %}#}
+{#            <tr>#}
+{#                <th scope="row"><i class="fa fa-user" aria-hidden="true"></i></th>#}
+{#                <td>bbbong(gimh****)</td>#}
+{#                <td>{{ reviews.review }}</td>#}
+{#                <td>{{ reviews.tag }}</td>#}
+{#                <td><i class="fa fa-trash-o" aria-hidden="true"></i></td>#}
+{#            </tr>#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+{#            </tbody>#}
+{#        </table>#}
+{#    </div>#}
+{#</div>#}
+{##}
+{##}
+{#</body>#}
+{#</html>#}

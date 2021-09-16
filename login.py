@@ -29,17 +29,40 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
-@app.route('/detail')
-def detail():
+@app.route('/main')
+def main():
     token_receive = request.cookies.get('my_info')
-    # return render_template("detail.html")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
+        print(user_info)
+        return render_template('main.html', user_info=user_info)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
+@app.route('/detail')
+def detailpage():
+    # return render_template('detail.html')
+    token_receive = request.cookies.get('my_info')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"username": payload["id"]})
         print(user_info)
         return render_template('detail.html', user_info=user_info)
-    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return redirect(url_for("detail"))
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
+
+@app.route('/detail/<keyword>')
+def detail(keyword):
+    movie = list(db.moodtheater.find({}, {"_id": False}))
+    review = list(db.movie_review.find({}, {"_id": False}))
+    return render_template("detail.html", movie=movie, word=keyword, review=review)
+
 
 @app.route('/login')
 def login():
@@ -85,6 +108,7 @@ def sign_up():
     return jsonify({'result': 'success'})
 
 
+
 @app.route('/sign_up/username_check_dup', methods=['POST'])
 def username_check_dup():
     username_receive = request.form['username_give']
@@ -104,7 +128,7 @@ def save_word():
     tag_receive = request.form["tag_give"]
     nickname_receive = request.form["nickname_give"]
 
-    doc = {"review": review_receive, "tag": tag_receive, "nick_name": nickname_receive}
+    doc = {"review": review_receive, "tag": tag_receive, "nick_name": nickname_receive }
     db.reviews.insert_one(doc)
     return jsonify({'result': 'success', 'msg': '리뷰가 저장되었습니다.'})
 

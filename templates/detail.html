@@ -34,7 +34,7 @@
             height: 150px;
 
             background-color: rgb(143, 130, 154);
-            background-image: url('{{ url_for("static", filename="logo.png") }}');
+            {#background-image: url('{{ url_for("static", filename="logo.png") }}');#}
 
             background-position: center;
             background-size: contain;
@@ -88,6 +88,7 @@
             //         return false;
             //     }
             // }
+
             if (review.length === 0) {
                 alert("내용을 입력해주세요");
                 return false;
@@ -104,7 +105,7 @@
                 $.ajax({
                     type: "POST",
                     url: `/api/save_word`,
-                    data: {review_give: review, tag_give: tag, nickname_give :"{{user_info.nick_name}}"},
+                    data: {review_give: review, tag_give: tag, nickname_give :"{{ user_info.nickname }}"},
                     success: function (response) {
                         alert(response["msg"])
                         window.location.href = "/detail"
@@ -112,15 +113,47 @@
                 });
             }
 
+        {# 밑에 코드들 때문에 리뷰쓰기 누를 때 위에 함수가 에러남 #}
+
+
+        {#function review_create({{ word }}) {#}
+        {#    let review = $('#exampleFormControlTextarea1').val()#}
+        {#    let order = $('#input-tag').val()#}
+        {#    $.ajax({#}
+        {#        type: "POST",#}
+        {#        url: '/api/review_create',#}
+        {#        data: {title_give: {{ word }}, review_give: review, tag_give: order}#}
+        {#        success: function (response) {#}
+        {#            alert(response['msg'])#}
+        {#            window.location.href = "/detail/{{ word }}"#}
+        {##}
+        {#        }#}
+        {##}
+        {#    });#}
+        {#}#}
+        {##}
+        {#function review_delete({{ word }}) {#}
+        {#    $.ajax({#}
+        {#        type: 'POST',#}
+        {#        url: '/api/review_delete',#}
+        {#        data: {title_give: "{{ word }}"},#}
+        {#        success: function (response) {#}
+        {#            alert(response['msg']);#}
+        {#            window.location.href = "/detail/{{ word }}"#}
+        {#        }#}
+        {#    });#}
+        {#}#}
+
+
     </script>
 </head>
 <body>
 <div class="wrap">
     <div class="banner" onclick="window.location.href = '/'"> {#//클릭하면 메인으로 떨어짐#}
     </div>
-    <button id="btn-save" class="btn btn-outline-sparta btn-lg" onclick="window.location.href = '/'"><i class="fa fa-chevron-left" aria-hidden="true"></i>
+    <button id="btn-save" class="btn btn-outline-sparta btn-lg" onclick="window.location.href = '/main'"><i class="fa fa-chevron-left" aria-hidden="true"></i>
     </button>
-    <button id="btn-save" class="btn btn-outline-sparta btn-lg" style=float:right>로그아웃
+    <button id="btn-save" class="btn btn-outline-sparta btn-lg" onclick="window.location.href= '/'">로그아웃
     </button>
     <div class="container">
         <div class="card mb-3" style="max-width: 800px;">
@@ -204,7 +237,5 @@
         </table>
     </div>
 </div>
-
-
 </body>
 </html>
