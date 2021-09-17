@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>영화 {{ word }} 상세정보</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+   {#    구글폰트#}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&display=swap"
+          rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <style>
+
+           * {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background-image: url("https://blog.lgchem.com/wp-content/uploads/2017/01/170104_movie_01.jpg");
+            background-size: cover;
+            background-repeat: repeat-y;
+            background-position: center center;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 80%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border: solid 1px gray;
+            border-radius: 10px;
+        }
+
+        span.example {
+            color: gray;
+            font-size: 14px;
+        }
+
+        .btn-group {
+            margin: 0 0 20px 0;
+            float: right;
+        }
+
+        .text-muted {
+            float: right;
+        }
+
+        .title {
+            position: absolute;
+            color: white;
+            float: left;
+            width: 30%;
+            font-size: 50px;
+            top: 10px;
+            text-align: center;
+            font-weight: 600;
+            font-family: 'Nanum Pen Script', cursive;
+            cursor: pointer;
+        }
+
+        .header {
+            width: 100vw;
+            height: 100px;
+            border-bottom: 2px rgba(255, 255, 255, 1) solid;
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .btn-outline-sparta {
+            color: white;
+            background-color: transparent;
+            background-image: none;
+            border-color: white;
+            position: absolute;
+            right: 5%;
+            top: 25%;
+        }
+
+        .card-story {
+            height: 180px;
+            line-height: 20px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 9;
+            -webkit-box-orient: vertical;
+        }
+
+
+    </style>
+    <script>
+        function review_create({{ word }}) {
+            let review = $('#exampleFormControlTextarea1').val()
+            let order = $('#input-tag').val()
+            let tag1 = $('#tag1').val()
+            let tag2 = $('#tag2').val()
+            let tag3 = $('#tag3').val()
+            let tag4 = $('#tag4').val()
+            let tag5 = $('#tag5').val()
+            let tag6 = $('#tag6').val()
+            console.log(tag1,tag2)
+
+            if (review.length === 0) {
+                alert("내용을 입력해주세요");
+                return false;
+            }
+            if (order.trim().length === 0) {
+                alert("감성을 선택해주세요");
+                $("#input-tag").val("");
+                return false;
+            } else if (order === "감성고르기") {
+                alert("감성을 선택해주세요");
+                $("#input-tag").val("");
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: '/api/review_create',
+                data: {title_give: {{ word }}, review_give: review, tag_give: order, nickname_give :"{{ user_info['nick_name'] }}",
+                    tag1_count: tag1, tag2_count: tag2, tag3_count: tag3, tag4_count: tag4, tag5_count: tag5, tag6_count: tag6},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.href = "/detail/{{ word }}"
+                }
+            });
+
+        }
+        function sign_out() {
+            $.removeCookie('my_info', {path:'/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+
+
+    </script>
+</head>
+<body>
+<div class="wrap">
+    <header class="header">
+        <div class="title" onclick="window.location.href='/main'">감수성 영화관</div>
+        <div class="menu">
+            <button id="btn-save" class="btn btn-outline-sparta btn-lg" onclick="window.location.href = '/main'">
+                <i class="fa fa-home" aria-hidden="true"></i></button>
+        </div>
+    </header>
+{#    <div class="banner" onclick="window.location.href = '/'"> {#//클릭하면 메인으로 떨어짐#}
+{#    </div>#}
+
+{#    </button>#}
+{#    <button id="btn-save" class="btn btn-outline-sparta btn-lg" onclick="sign_out()">로그아웃#}
+{#    </button>#}
+    <div class="container">
+        <div class="card mb-3" style="max-width: 800px;">
+            <div class="row g-0">
+                {% for name in movie %}
+                    {% if name.title == word %}
+                        <img src="">
+                        <h1 id="word" style="display: inline;"></h1>
+                        <h2></h2>
+                        <h5 id="pronunciation" style="display: inline;"></h5>
+
+                        <div class="col-md-4">
+                            <img src="{{ name.big_image }}" class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h3 class="card-title"> {{ word }} </h3>
+                                <p class="card-story">{{ name.story }}</p>
+                                <a class="card-text" href="{{ name.url }}"><small class="text-muted">더보기...</small></a>
+                                <input type="hidden" id="tag1" value="{{ name.sad_count }}"/>
+                                <input type="hidden" id="tag2" value="{{ name.heal_count }}"/>
+                                <input type="hidden" id="tag3" value="{{ name.itchy_count }}"/>
+                                <input type="hidden" id="tag4" value="{{ name.thrill_count }}"/>
+                                <input type="hidden" id="tag5" value="{{ name.baby_count }}"/>
+                                <input type="hidden" id="tag6" value="{{ name.spicy_count }}"/>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end">
+            <div>
+                <h3 id="word" style="display: inline;">리뷰하기</h3>
+                <span class="example">당신의 감성을 남겨주세요 어쩌구</span>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" style="resize: none"></textarea>
+        </div>
+        <div id="definitions">
+            <div class="card-body">
+                <div class="btn-group" role="group" aria-label="...">
+                    <div class="btn-group" role="group">
+                        <select class="custom-select" id="input-tag">
+                            <option selected>감성고르기</option>
+                            <option>울고싶은</option>
+                            <option>힐링되는</option>
+                            <option>간질간질한</option>
+                            <option>짜릿한</option>
+                            <option>아기자기한</option>
+                            <option>매콤한</option>
+                        </select>
+                        <button onclick="review_create('{{ word }}')" type="button" class="btn btn-default">작성하기
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <tbody>
+            {% for reviews in review %}
+                {% if reviews.title ==  word %}
+                    <tr>
+                        <th scope="row"><i class="fa fa-user" aria-hidden="true"></i></th>
+                        <td>{{ reviews.nick_name }}</td>
+                        <td>{{ reviews.review }}</td>
+                        <td>{{ reviews.tag }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

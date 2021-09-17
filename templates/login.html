@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>감수성 영화관 | 로그인</title>
+
+    <!--구글폰트-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&display=swap"
+          rel="stylesheet">
+
+    <!--버마-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <script>
+        function sign_in() {
+            let username = $("#input-username").val()
+            let password = $("#input-password").val()
+
+            if (username == "") {
+                $("#help-id-login").text("아이디를 입력해주세요.")
+                $("#input-username").focus()
+                return;
+            } else {
+                $("#help-id-login").text("")
+            }
+
+            if (password == "") {
+                $("#help-password-login").text("비밀번호를 입력해주세요.")
+                $("#input-password").focus()
+                return;
+            } else {
+                $("#help-password-login").text("")
+            }
+            $.ajax({
+                type: "POST",
+                url: "/sign_in",
+                data: {
+                    username_give: username,
+                    password_give: password,
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        $.cookie('my_info', response['token'], {path: '/'});
+                        window.location.replace("/main")
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            });
+        }
+
+        function sign_up() {
+            let username = $("#input-username").val()
+            let password = $("#input-password").val()
+            let password2 = $("#input-password2").val()
+            let nickname = $("#input-nickname").val()
+            console.log(username, password, password2, nickname)
+
+
+            if ($("#help-id").hasClass("is-danger")) {
+                alert("아이디를 다시 확인해주세요.")
+                return;
+            } else if (!$("#help-id").hasClass("is-success")) {
+                alert("아이디 중복확인 해주세요.")
+                return;
+            }else if ($("#help-id-nickname").hasClass("is-danger")){
+                alert("닉네임을 다시 확인 해주세요.")
+                return;
+            }else if(!$("#help-id-nickname").hasClass("is-success")) {
+                alert("닉네임 중복확인을 해주세요.")
+                return;
+            }
+
+            if (password == "") {
+                $("#help-password").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-password").focus()
+                return;
+            } else if (!is_password(password)) {
+                $("#help-password").text("비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자").removeClass("is-safe").addClass("is-danger")
+                $("#input-password").focus()
+                return
+            } else {
+                $("#help-password").text("사용할 수 있는 비밀번호입니다.").removeClass("is-danger").addClass("is-success")
+            }
+            if (password2 == "") {
+                $("#help-password2").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-password2").focus()
+                return;
+            } else if (password2 != password) {
+                $("#help-password2").text("비밀번호가 일치하지 않습니다.").removeClass("is-safe").addClass("is-danger")
+                $("#input-password2").focus()
+                return;
+            } else {
+                $("#help-password2").text("비밀번호가 일치합니다.").removeClass("is-danger").addClass("is-success")
+            }
+            $.ajax({
+                type: "POST",
+                url: "/sign_up/save",
+                data: {
+                    username_give: username,
+                    password_give: password,
+                    nickname_give : nickname,
+                },
+                success: function (response) {
+                    alert("감수성 영화관의 회원이 되신걸 축하합니다!")
+                    window.location.replace("/login")
+                }
+            });
+
+        }
+
+        function username_check_dup() {
+            let username = $("#input-username").val()
+            console.log("username :", username)
+            if (username == "") {
+                $("#help-id").text("아이디를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-username").focus()
+                return;
+            }
+            if (!is_username(username)) {
+                $("#help-id").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 3-10자 길이").removeClass("is-safe").addClass("is-danger")
+                $("#input-username").focus()
+                return;
+            }
+            $("#help-id").addClass("is-loading")
+            $.ajax({
+                type: "POST",
+                url: "/sign_up/username_check_dup",
+                data: {
+                    username_give: username
+                },
+                success: function (response) {
+
+                    if (response["exists"]) {
+                        $("#help-id").text("이미 존재하는 아이디입니다.").removeClass("is-safe").addClass("is-danger")
+                        $("#input-username").focus()
+                    } else {
+                        $("#help-id").text("사용할 수 있는 아이디입니다.").removeClass("is-danger").addClass("is-success")
+                    }
+                    $("#help-id").removeClass("is-loading")
+
+                }
+            });
+        }
+         function nickname_check_dup() {
+            let nickname = $("#input-nickname").val()
+            console.log("nickname :", nickname)
+            if (nickname == "") {
+                $("#help-id-nickname").text("닉네임을 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-nickname").focus()
+                return;
+            }
+            if (!is_nickname(nickname)) {
+                $("#help-id-nickname").text("닉네임의 형식을 확인해주세요. 한글만 사용가능. 2-8자 길이").removeClass("is-safe").addClass("is-danger")
+                $("#input-nickname").focus()
+                return;
+            }
+            $("#help-id-nickname").addClass("is-loading")
+            $.ajax({
+                type: "POST",
+                url: "/sign_up/nickname_check_dup",
+                data: {
+                    nickname_give: nickname
+                },
+                success: function (response) {
+
+                    if (response["exists"]) {
+                        $("#help-id-nickname").text("이미 존재하는 닉네임입니다.").removeClass("is-safe").addClass("is-danger")
+                        $("#input-nickname").focus()
+                    } else {
+                        $("#help-id-nickname").text("사용할 수 있는 닉네임입니다.").removeClass("is-danger").addClass("is-success")
+                    }
+                    $("#help-id-nickname").removeClass("is-loading")
+                }
+            });
+        }
+
+        function is_username(asValue) {
+            let regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{3,10}$/;
+            return regExp.test(asValue);
+        }
+
+        function is_nickname(asValue) {
+            let regExp = /^(?=.*[가-힣])[가-힣]{2,8}$/;
+            return regExp.test(asValue);
+        }
+
+        function is_password(asValue) {
+            let regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+            return regExp.test(asValue);
+        }
+
+        function toggle_sign_up() {
+            $("#sign-up").toggleClass("is-hidden")
+            $("#sign-in-btn").toggleClass("is-hidden")
+            $("#btn-confirm").toggleClass("is-hidden")
+            $("#help-id").toggleClass("is-hidden")
+            $("#help-password").toggleClass("is-hidden")
+            $("#help-password2").toggleClass("is-hidden")
+            $("#help-id-nickname").toggleClass("is-hidden")
+        }
+
+    </script>
+    <style>
+        .is-hidden {
+            display: none !important;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background-image: url("https://blog.lgchem.com/wp-content/uploads/2017/01/170104_movie_01.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center  center;
+        }
+
+        p {
+            color: white;
+            text-align: center;
+            margin: 5px 0;
+            font-weight: 800;
+        }
+
+        header {
+            width: 100vw;
+        }
+
+        header .title {
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            font-size: 120px;
+            font-family: 'Nanum Pen Script', cursive;
+            color: white;
+        }
+
+        .login-section {
+            position: relative;
+            height: 70%;
+        }
+
+        .sign-in-up {
+            max-width: 450px;
+            width: 100%;
+            padding: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .label {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .field.has-addons {
+            display: block;
+        }
+
+        .control{
+            display: flex;
+        }
+
+        .input-id {
+            /*width: 80%;*/
+        }
+
+        .btn-confirm {
+            width: 20%;
+        }
+
+        button {
+            width: 100%;
+        }
+
+        .login-btn-group .button:first-child{
+            margin: 5px 0px 15px 0px;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <a href="/" class="title"> 감수성 영화관 </a>
+</header>
+<section class="login-section">
+    <div class="sign-in-up">
+        <div class="sign-in">
+            <div class="field has-addons has-addons-centered">
+                <p class="control has-icons-left">
+                    <input class="input input-id" id="input-username" type="text" placeholder="아이디를 입력해주세요">
+                    <span class="icon is-small is-left">
+                    <i class="fas fa-user"></i>
+                </span>
+                    <button class="button is-info is-active btn-confirm is-hidden" id="btn-confirm" onclick="username_check_dup()">중복확인</button>
+                </p>
+            </div>
+            <p id="help-id" class="help is-hidden">아이디는 3-10자의 영문과 숫자와 일부 특수문자(._-)만 입력 가능합니다.</p>
+            <p id="help-id-login" class="help is-danger"></p>
+            <div class="field">
+                <p class="control has-icons-left">
+                    <input id="input-password" class="input" type="password" placeholder="비밀번호를 입력해주세요">
+                    <span class="icon is-small is-left">
+                         <i class="fas fa-lock"></i>
+                    </span>
+                </p>
+            </div>
+            <p id="help-password" class="help is-hidden">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. </br> 특수문자(!@#$%^&*)도 사용 가능합니다.</p>
+            <div class="login-btn-group" id="sign-in-btn">
+                <button class="button is-info is-active" onclick="sign_in()">입장하기</button>
+                <p class="sign-in-p"> 아직 회원이 아니신가요? </p>
+                <button class="button is-info is-active" onclick="toggle_sign_up()">회원가입</button>
+            </div>
+        </div>
+        <div class="sign-up is-hidden" id="sign-up">
+            <div class="field">
+{#                <label class="label">비밀번호 확인</label>#}
+                <p class="control has-icons-left">
+                    <input id="input-password2" class="input" type="password" placeholder="비밀번호를 한번 더 입력해주세요">
+                    <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                </span>
+                </p>
+                <p id="help-password2" class="help is-hidden">비밀번호를 다시 한 번 입력해주세요.</p>
+            </div>
+            <div class="field has-addons has-addons-centered">
+{#                <label class="label">닉네임</label>#}
+                <p class="control has-icons-left has-icons-right">
+                    <input class="input input-id" id="input-nickname" type="text" placeholder="닉네임을 입력해주세요">
+                    <span class="icon is-small is-left">
+                    <i class="fas fa-user"></i>
+                </span>
+                    <button class="button is-info is-active btn-confirm" onclick="nickname_check_dup()">중복확인</button>
+                </p>
+            </div>
+            <p id="help-id-nickname" class="help is-hidden">닉네임은 2-8자의 한글만 입력 가능합니다.</p>
+            <p id="help-id-login" class="help is-danger"></p>
+            <div class="login-btn-group">
+                <button class="button is-info is-active" onclick="sign_up()">가입하기!</button>
+                <button class="button is-danger is-active" onclick="toggle_sign_up()">돌아가기</button>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

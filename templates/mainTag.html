@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    {#    구글폰트#}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&display=swap"
+          rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+
+    <title>감수성 영화관 | 기분에 따른 영화추천</title>
+
+    <script>
+        function sign_out() {
+            $.removeCookie('my_info', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+
+         function tag1(){
+            let tag_one = $("#tag1").val()
+            console.log(tag_one)
+
+            $.ajax({
+                type: "POST",
+                url: "/main/tag1",
+                data: {
+                    tag_give: tag_one,
+                },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert("태그1입니다.")
+                    }
+                }
+            });
+        }
+    </script>
+    <style>
+
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        a:hover {
+            text-decoration: none;
+            color: greenyellow;
+            transition: .2s ease-in;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background-image: url("https://blog.lgchem.com/wp-content/uploads/2017/01/170104_movie_01.jpg");
+            background-size: cover;
+            background-repeat: repeat-y;
+            background-position: center center;
+            opacity: 0.8;
+        }
+
+        .header {
+            width: 100vw;
+            height: 100px;
+            border-bottom: 2px rgba(255, 255, 255, 1) solid;
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .wrap {
+
+        }
+
+        .menu {
+            position: absolute;
+            color: white;
+            right: 5%;
+            top: 25%;
+        }
+
+        .title {
+            position: absolute;
+            color: white;
+            float: left;
+            width: 30%;
+            font-size: 50px;
+            top: 10px;
+            text-align: center;
+            font-weight: 600;
+            font-family: 'Nanum Pen Script', cursive;
+            cursor: pointer;
+        }
+
+        .memo {
+            text-align: center;
+            color: white;
+            padding: 100px;
+            height: 200px;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .memo > p {
+            font-size: 3rem;
+            font-family: "Nanum Pen Script", cursive;
+        }
+
+        article {
+            display: block;
+            border-bottom: 1px white solid;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .total_mood {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        article {
+        }
+
+        .mood {
+            margin: 30px;
+        }
+
+        .mood > button {
+            width: 200px;
+        }
+
+        .list {
+            color: white;
+        }
+
+        .tag {
+            text-align: left;
+
+        }
+
+        .media {
+            display: block;
+        }
+
+        .movie_container {
+            display: flex;
+            margin: 10px 0 30px 30px;
+        }
+
+        .mb-1 {
+            display: flex;
+        }
+
+        .movie-title {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+        }
+
+        .genere,
+        .ranks {
+            line-height: 2.5;
+            font-size: 12px;
+        }
+
+        .genere {
+            margin: 0 10px;
+        }
+
+        .media-body {
+            position: relative;
+            max-width: 1200px;
+        }
+
+        .movie-description {
+            height: 150px;
+            overflow: auto;
+            font-size: 14px;
+            margin: 10px 0;
+            line-height: 2.5;
+        }
+
+        .tag {
+            font-size: 14px;
+            bottom: 10px;
+            position: absolute;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<header class="header">
+    <div class="title" onclick="window.location.href='/main'">감수성 영화관</div>
+    <div class="menu">
+        <button onclick="sign_out()" type="button" class="btn btn-outline-light">로그아웃</button>
+    </div>
+</header>
+<div class="wrap">
+    <div class="memo">
+         <p> 오늘의 스파르타님 감성을 골라주세요!</p>
+    </div>
+    <article class="article">
+        <div class="total_mood">
+            <div class="mood">
+                <button onclick="window.location.href='/main/123'" id="tag1" type="button" class="btn btn-light" value="울고싶은">#울고싶은</button>
+            </div>
+            <div class="mood">
+                <button onclick="window.location.href='/main/124'" id="tag2" type="button" class="btn btn-light" value="혼자보고싶은">#힐링되는</button>
+            </div>
+            <div class="mood">
+                <button onclick="window.location.href='/main/125'" id="tag3" type="button" class="btn btn-light" value="오싹한">#간질간질한</button>
+            </div>
+            <div class="mood">
+                <button onclick="window.location.href='/main/126'" type="button" class="btn btn-light" value="꿀잼">#짜릿한</button>
+            </div>
+            <div class="mood">
+                <button onclick="window.location.href='/main/127'" class="btn btn-light" value="신선">#아기자기한</button>
+            </div>
+            <div class="mood">
+                <button onclick="window.location.href='/main/128'" type="button" class="btn btn-light" value="힐링">#매콤한</button>
+            </div>
+        </div>
+    </article>
+    <article class="list">
+        <ul class="list-unstyled">
+            <div class="media">
+                 {% for name in movie %}
+                    {% set movie_title = name.title %}
+                    {% set movie_stars = name.stars %}
+                    {% set movie_genre = name.genre %}
+                    {% set movie_image = name.big_image %}
+                    {% set movie_story = name.story %}
+                    <a href="/detail/{{ movie_title }}" class="movie_container">
+                        <img class="mr-3" src="{{ movie_image }}" alt="Generic placeholder image">
+                        <div class="media-body">
+                            <div class="mt-0 mb-1">
+                                <div class="movie-title">{{ movie_title }}</div>
+                                <span class="genere">장르 : {{ movie_genre }}</span>
+                                <span class="ranks">별점 : {{ movie_stars }}</span>
+                            </div>
+                            <p class="movie-description">{{ movie_story }}</p>
+                            <div class="tag">
+                                #울고싶은
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </ul>
+    </article>
+</div>
+</body>
+
+</html>
