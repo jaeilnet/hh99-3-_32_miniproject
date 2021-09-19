@@ -8,6 +8,10 @@
 ### 데모영상
 [![감수성영화관_유튜브데모영상](https://img.youtube.com/vi/zkXj2Xym_aY/0.jpg)](https://www.youtube.com/watch?v=zkXj2Xym_aY)
 
+### 주소
+
+http://gmkim.shop
+
 ### 기능
 필수 포함 기능 
 JWT 인증 방식 로그인 구현 / jinja2 템플릿 엔진 사용하여 로그인 구현
