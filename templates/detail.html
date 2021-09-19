@@ -145,8 +145,18 @@
             $.ajax({
                 type: "POST",
                 url: '/api/review_create',
-                data: {title_give: {{ word }}, review_give: review, tag_give: order, nickname_give :"{{ user_info['nick_name'] }}",
-                    tag1_count: tag1, tag2_count: tag2, tag3_count: tag3, tag4_count: tag4, tag5_count: tag5, tag6_count: tag6},
+                data: {
+                    title_give: {{ word }},
+                    review_give: review,
+                    tag_give: order,
+                    nickname_give :"{{ user_info['nick_name'] }}",
+                    tag1_count: tag1,
+                    tag2_count: tag2,
+                    tag3_count: tag3,
+                    tag4_count: tag4,
+                    tag5_count: tag5,
+                    tag6_count: tag6
+                },
                 success: function (response) {
                     alert(response['msg'])
                     window.location.href = "/detail/{{ word }}"
@@ -172,12 +182,6 @@
                 <i class="fa fa-home" aria-hidden="true"></i></button>
         </div>
     </header>
-{#    <div class="banner" onclick="window.location.href = '/'"> {#//클릭하면 메인으로 떨어짐#}
-{#    </div>#}
-
-{#    </button>#}
-{#    <button id="btn-save" class="btn btn-outline-sparta btn-lg" onclick="sign_out()">로그아웃#}
-{#    </button>#}
     <div class="container">
         <div class="card mb-3" style="max-width: 800px;">
             <div class="row g-0">

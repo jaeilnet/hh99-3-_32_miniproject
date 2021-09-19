@@ -41,23 +41,6 @@
             window.location.href = "/login"
         }
 
-         function tag1(){
-            let tag_one = $("#tag1").val()
-            console.log(tag_one)
-
-            $.ajax({
-                type: "POST",
-                url: "/main/tag1",
-                data: {
-                    tag_give: tag_one,
-                },
-                success: function (response) {
-                    if (response['result'] == 'success') {
-                        alert("태그1입니다.")
-                    }
-                }
-            });
-        }
     </script>
     <style>
 
@@ -224,7 +207,7 @@
 </header>
 <div class="wrap">
     <div class="memo">
-         <p> 오늘의 스파르타님 감성을 골라주세요!</p>
+        <p> 오늘의 {{ user_info['nick_name'] }}님 감성을 골라주세요!</p>
     </div>
     <article class="article">
         <div class="total_mood">
@@ -250,6 +233,7 @@
     </article>
     <article class="list">
         <ul class="list-unstyled">
+{#        jinja 영화출력 #}
             <div class="media">
                  {% for name in movie %}
                     {% set movie_title = name.title %}
@@ -267,7 +251,6 @@
                             </div>
                             <p class="movie-description">{{ movie_story }}</p>
                             <div class="tag">
-                                #울고싶은
                             </div>
                         </div>
                     </a>

@@ -33,59 +33,73 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
+#로그인 페이지
 @app.route('/login')
 def login():
     return render_template('login.html')
 
+
+# 메인페이지
 @app.route('/main', methods=['GET'])
 def main():
+    # 토큰 가져오기
     token_receive = request.cookies.get('my_info')
+    # 영화 목록 가져오기
     movie = list(db.moodtheater.find({}, {"_id": False}))
+    try:
+        # jw토큰 로그인 정보 디코드
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
+        # 현재 로그인 된 id와 일치하는 로그인 정보 가져오기
+        user_info = db.users.find_one({"username": payload["id"]})
+
+        # 메인 페이지 렌더링, db에서 가져온 로그인 정보, 영화 정보 main 페이지로 전달
+        return render_template('main.html', user_info=user_info, movie=movie)
+    except jwt.ExpiredSignatureError:
+
+        # 토큰 시간이 완료되면 로그인 페이지로 보내버림 msg  - 시간이 만료 되었습니다.
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+
+        # 토큰이 존재하지 않다면 로그인 페이지로 보내버림 msg 정보가 존재 하지 않습니다.
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
+# Tag #울고싶은
+@app.route('/main/123', methods=['GET'])
+def tag1():
+    token_receive = request.cookies.get('my_info')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"username": payload["id"]})
-        return render_template('main.html', user_info=user_info, movie=movie)
+
+        sad_counts = list(db.moodtheater.find({"sad_count": {"$gt": 0}}).sort('sad_count', -1))
+        print(sad_counts)
+
+        return render_template('mainTag.html', user_info=user_info, movie=sad_counts)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
-@app.route('/main/123', methods=['GET'])
-def tag1():
-        token_receive = request.cookies.get('my_info')
-        try:
-            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-            user_info = db.users.find_one({"username": payload["id"]})
-
-            sad_counts = list(db.moodtheater.find({"sad_count": {"$gt": 0}}).sort('sad_count', -1))
-            print(sad_counts)
-
-            return render_template('mainTag.html', user_info=user_info, movie=sad_counts)
-        except jwt.ExpiredSignatureError:
-            return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-        except jwt.exceptions.DecodeError:
-            return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
-
+# Tag #힐링되는
 @app.route('/main/124', methods=['GET'])
 def tag2():
-        token_receive = request.cookies.get('my_info')
-        try:
-            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-            user_info = db.users.find_one({"username": payload["id"]})
+    token_receive = request.cookies.get('my_info')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
 
-            healcounts = list(db.moodtheater.find({"heal_count": {"$gt": 0}}).sort('heal_count', -1))
-            print(healcounts)
+        healcounts = list(db.moodtheater.find({"heal_count": {"$gt": 0}}).sort('heal_count', -1))
+        print(healcounts)
 
-            # movie = list(db.moodtheater.find({"title": healcount_title}, {"_id": False}))
-            # print("힐링", movie)
+        return render_template('mainTag.html', user_info=user_info, movie=healcounts)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
-            return render_template('mainTag.html', user_info=user_info, movie=healcounts)
-        except jwt.ExpiredSignatureError:
-            return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-        except jwt.exceptions.DecodeError:
-            return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
-
+# Tag #간질간질한
 @app.route('/main/125', methods=['GET'])
 def tag3():
     token_receive = request.cookies.get('my_info')
@@ -102,6 +116,7 @@ def tag3():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
+# Tag #짜릿한
 @app.route('/main/126', methods=['GET'])
 def tag4():
     token_receive = request.cookies.get('my_info')
@@ -118,6 +133,7 @@ def tag4():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
+# Tag #아기자기한
 @app.route('/main/127', methods=['GET'])
 def tag5():
     token_receive = request.cookies.get('my_info')
@@ -134,6 +150,7 @@ def tag5():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
+# Tag #매콤한
 @app.route('/main/128', methods=['GET'])
 def tag6():
     token_receive = request.cookies.get('my_info')
@@ -240,10 +257,8 @@ def review_create():
 
     if tag_receive==compareSad:
         count = int(count01) + 1
-        print("if1",count)
         str(count)
-        abc=db.moodtheater.update({'title': title_receive}, {'$set': {'sad_count': count}})
-        print("abc",abc)
+        db.moodtheater.update({'title': title_receive}, {'$set': {'sad_count': count}})
     elif tag_receive==compareHeal:
         count = int(count02) + 1
         db.moodtheater.update({'title': title_receive}, {'$set': {'heal_count': count}})
@@ -263,8 +278,6 @@ def review_create():
     doc ={
         "title": title_receive, "review": review_receive, "tag": tag_receive, "nick_name": nickname_receive
     }
-
-    print("asdad",doc)
 
     db.movie_review.insert_one(doc)
 
